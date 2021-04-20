@@ -1,2 +1,11 @@
 # Project exclude paths
 /out/
+
+build/
+report/
+reports/
+docs/
+
+Lab3.iml
+
+.idea/
