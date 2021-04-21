@@ -13,6 +13,9 @@
     <property name="scp.destdir" value="/home/s284710"/>
     <property name="report.dir" location="report"/>
     <property name="docs.dir" location="docs"/>
+    <property name="manifest" location="${build.dir}/MANIFEST.MF"/>
+    <property name="replace.value" value="epta"/>
+    <property name="replace.token" value="sir"/>
 
     <target name="compile">
         <mkdir dir="${build.dir}/classes"/>
@@ -25,13 +28,14 @@
     </target>
 
     <target name="build" depends="compile">
+        <manifest file="${manifest}" mode="update">
+            <attribute name="Main-Class"
+                       value="yahoo.eu.Main"/>
+        </manifest>
         <jar destfile="build/${ant.project.name}.jar"
              basedir="${compiled.dir}"
-             excludes="Test*.class">
-            <manifest>
-                <attribute name="Main-Class"
-                           value="yahoo.eu.Main"/>
-            </manifest>
+             excludes="Test*.class"
+             manifest="${manifest}">
         </jar>
     </target>
 
@@ -68,25 +72,45 @@
     </target>
 
     <target name="scp" depends="build">
-        <scp file="${buildDir}/${ant.project.name}.jar"
+        <scp file="${build.dir}/${ant.project.name}.jar"
              todir="${scp.username}:${scp.password}@${scp.host}:${scp.destdir}"
              port="${scp.port}"
              trust="true"/>
     </target>
 
     <target name="alt">
-        <replace dir="${sources.dir}" value="sir">
-            <replacetoken>epta</replacetoken>
-        </replace>
+        <replace dir="${sources.dir}" value="${replace.value}" token="${replace.token}"/>
         <antcall target="build"/>
     </target>
 
     <target name="doc">
         <delete dir="${docs.dir}"/>
         <mkdir dir="${docs.dir}"/>
+        <mkdir dir="${build.dir}"/>
+        <checksum property="hash.MD5">
+            <fileset dir="${sources.dir}">
+                <include name="*.java"/>
+            </fileset>
+        </checksum>
+        <checksum property="hash.SHA1" algorithm="SHA-1">
+            <fileset dir="${sources.dir}">
+                <include name="*.java"/>
+            </fileset>
+        </checksum>
+
+        <manifest file="${manifest}" mode="update">
+            <attribute name="Main-Class" value="${mainClass}"/>
+            <section name="Checksum">
+                <attribute name="MD5" value="${hash.MD5}"/>
+                <attribute name="SHA-1" value="${hash.SHA1}"/>
+            </section>
+        </manifest>
         <javadoc
             destdir="${docs.dir}">
-            <fileset dir="${sources.dir}"/>
+            <fileset dir="${sources.dir}">
+            </fileset>
         </javadoc>
+        <zip destfile="${build.dir}/javadoc.zip"
+             basedir="${docs.dir}"/>
     </target>
 </project>

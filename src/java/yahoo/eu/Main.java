@@ -20,6 +20,6 @@ public class Main {
      * @return Фраза, которой полагается встречать гостей на великой станции метро "Купчино"
      */
     public String getCodePhrase() {
-        return "Hello, sir";
+        return "Hello, epta";
     }
 }
