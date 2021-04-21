@@ -1,21 +1,9 @@
 <?xml version="1.0"?>
 <project name="Lab3" default="compile">
 
-    <property name="sources.dir" location="src/java/yahoo/eu"/>
-    <property name="sources.tests.dir" location="src/test"/>
-    <property name="build.dir" location="build"/>
-    <property name="compiled.dir" location="${build.dir}/classes"/>
-    <property name="mainClass" value="yahoo.eu.Main"/>
-    <property name="scp.host" value="77.234.214.82"/>
-    <property name="scp.username" value="s284710"/>
-    <property name="scp.password" value="ltw411"/>
-    <property name="scp.port" value="2222"/>
-    <property name="scp.destdir" value="/home/s284710"/>
-    <property name="report.dir" location="report"/>
-    <property name="docs.dir" location="docs"/>
-    <property name="manifest" location="${build.dir}/MANIFEST.MF"/>
-    <property name="replace.value" value="epta"/>
-    <property name="replace.token" value="sir"/>
+    <include file="properties.xml"/>
+
+<!--    <loadproperties srcfile="lab3.properties"/>-->
 
     <target name="compile">
         <mkdir dir="${build.dir}/classes"/>
